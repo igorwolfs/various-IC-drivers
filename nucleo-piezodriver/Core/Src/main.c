@@ -22,6 +22,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "ads1115.h"
+#include "tmp102.h"
 #include <stdio.h>
 #define ARRAY_SIZE(n)   (sizeof(n) / sizeof(n[0]))
 /* USER CODE END Includes */
@@ -109,17 +110,23 @@ int main(void)
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
   if (ADS1115_Init(&hi2c1, ADS1115_DATA_RATE_128, ADS1115_PGA_TWO)) {
-    HAL_Delay(1500);
   }
   else {
-    HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
+    printf("Error!\r\n");
   }
+  TMP102_t tmp102_0; // address: 1001001
+  uint8_t tmp102_0_addr = 0x49;
+  TMP102Init(&tmp102_0, &hi2c1, tmp102_0_addr);
+  TMP102_t tmp102_1; // address: 1001011
+  uint8_t tmp102_1_addr = 0x4B;
+  TMP102Init(&tmp102_0, &hi2c1, tmp102_1_addr);
+
   uint8_t ADC_VBAT_CHANNEL = ADS1115_MUX_AIN0; // 400 (5 V) -> 1600 (19-20 V) factor 0.08 [1.8/(20+1.8)]
   uint8_t ADC_IBAT_CHANNEL = ADS1115_MUX_AIN1; // 
   uint8_t ADC_IINV_CHANNEL = ADS1115_MUX_AIN2;
   uint8_t ADC_IFPGA_CHANNEL = ADS1115_MUX_AIN3;
   uint8_t arr[] = {ADC_VBAT_CHANNEL, ADC_IBAT_CHANNEL, ADC_IINV_CHANNEL, ADC_IFPGA_CHANNEL};
-  float values[] = {0,0,0,0};
+  float values[] = {0, 0, 0, 0};
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -235,17 +242,38 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED2_Pin|PSEPIC_EN_Pin|PBOOST_EN_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : LED2_Pin */
-  GPIO_InitStruct.Pin = LED2_Pin;
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOC, PWM0_HI_Pin|PWM1_LO_Pin|PWM1_HI_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(PWM0_LO_GPIO_Port, PWM0_LO_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : LED2_Pin PSEPIC_EN_Pin PBOOST_EN_Pin */
+  GPIO_InitStruct.Pin = LED2_Pin|PSEPIC_EN_Pin|PBOOST_EN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED2_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PWM0_HI_Pin PWM1_LO_Pin PWM1_HI_Pin */
+  GPIO_InitStruct.Pin = PWM0_HI_Pin|PWM1_LO_Pin|PWM1_HI_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : PWM0_LO_Pin */
+  GPIO_InitStruct.Pin = PWM0_LO_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(PWM0_LO_GPIO_Port, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */

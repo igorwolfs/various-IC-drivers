@@ -42,7 +42,7 @@
 #include "ads1115.h"
 
 /* Variables */
-uint8_t ADS1115_devAddress = 0b1001000;	// 7 bit address, without R/W' bit.
+uint8_t ADS1115_devAddress = 0x48;	// 7 bit address, without R/W' bit.
 
 I2C_HandleTypeDef ADS1115_I2C_Handler;	// HAL I2C handler store variable.
 

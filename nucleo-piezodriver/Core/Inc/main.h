@@ -59,6 +59,18 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define LED2_Pin GPIO_PIN_5
 #define LED2_GPIO_Port GPIOA
+#define PWM0_HI_Pin GPIO_PIN_5
+#define PWM0_HI_GPIO_Port GPIOC
+#define PWM0_LO_Pin GPIO_PIN_15
+#define PWM0_LO_GPIO_Port GPIOB
+#define PWM1_LO_Pin GPIO_PIN_6
+#define PWM1_LO_GPIO_Port GPIOC
+#define PWM1_HI_Pin GPIO_PIN_8
+#define PWM1_HI_GPIO_Port GPIOC
+#define PSEPIC_EN_Pin GPIO_PIN_11
+#define PSEPIC_EN_GPIO_Port GPIOA
+#define PBOOST_EN_Pin GPIO_PIN_12
+#define PBOOST_EN_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 
