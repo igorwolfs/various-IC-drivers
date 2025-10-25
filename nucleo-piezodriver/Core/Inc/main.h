@@ -49,6 +49,8 @@ extern "C" {
 
 /* USER CODE END EM */
 
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -59,20 +61,27 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define LED2_Pin GPIO_PIN_5
 #define LED2_GPIO_Port GPIOA
-#define PWM0_HI_Pin GPIO_PIN_5
-#define PWM0_HI_GPIO_Port GPIOC
-#define PWM0_LO_Pin GPIO_PIN_15
-#define PWM0_LO_GPIO_Port GPIOB
-#define PWM1_LO_Pin GPIO_PIN_6
-#define PWM1_LO_GPIO_Port GPIOC
-#define PWM1_HI_Pin GPIO_PIN_8
-#define PWM1_HI_GPIO_Port GPIOC
-#define PSEPIC_EN_Pin GPIO_PIN_11
-#define PSEPIC_EN_GPIO_Port GPIOA
-#define PBOOST_EN_Pin GPIO_PIN_12
-#define PBOOST_EN_GPIO_Port GPIOA
+#define PWM0_HI_Pin GPIO_PIN_0
+#define PWM0_HI_GPIO_Port GPIOB
+#define PWM1_LO_Pin GPIO_PIN_1
+#define PWM1_LO_GPIO_Port GPIOB
+#define PWM0_LO_Pin GPIO_PIN_9
+#define PWM0_LO_GPIO_Port GPIOA
+#define PWM1_HI_Pin GPIO_PIN_10
+#define PWM1_HI_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
+extern TIM_HandleTypeDef htim1;
+
+#define PWM0_LO_CH    TIM_CHANNEL_2
+#define PWM0_LO_TIM   htim1
+#define PWM0_HI_CH    TIM_CHANNEL_2
+#define PWM0_HI_TIM   htim1
+
+#define PWM1_LO_CH    TIM_CHANNEL_3
+#define PWM1_LO_TIM   htim1
+#define PWM1_HI_CH    TIM_CHANNEL_3
+#define PWM1_HI_TIM   htim1
 
 /* USER CODE END Private defines */
 
