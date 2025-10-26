@@ -12,54 +12,57 @@
 // ------------------------------------------------ Sets Wave Frequency & Phase (In Degree) In PHASE0 & FREQ0 Registers
 // #define SET_WAVE
 // ------------------------------------------------ Initializing AD9833
-void AD9833_SetWave(uint16_t WaveType,float FRQ,float Phase){
-    // ---------- Tuning Word for Phase ( 0 - 360 Degree )
-    if(Phase<0)Phase=0; // Changing Phase Value to Positive
-    if(Phase>360)Phase=360; // Maximum value For Phase (In Degree)
-    uint32_t phaseVal  = ((int)(Phase*(4096/360))) | 0XC000;  // 4096/360 = 11.37 change per Degree for Register And using 0xC000 which is Phase 0 Register Address
-    
-    // ** Tuning word for Frequency
-    long freq=0;
-    freq=(int)(((FRQ * pow(2,28))/FMCLK)+1); // Tuning Word
-    uint16_t FRQHW=(int)((freq & 0xFFFC000) >> 14); // FREQ MSB
-    uint16_t FRQLW=(int)(freq & 0x3FFF);  // FREQ LSB 
-    FRQLW |= 0x4000;
-    FRQHW |= 0x4000; 
+void AD9833_SetWave(uint16_t WaveType, float FRQ, float Phase) {
 
-    // ** WRITE 
-    // WAVE-TYPE
-    #ifdef SET_WAVE
-    HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_RESET);
-    if (HAL_SPI_Transmit(&hspi2, &WaveType, 1, 10) != HAL_OK) {
-        Error_Handler();
+    // Clamp Phase 0–360
+    if (Phase < 0) Phase = 0;
+    if (Phase > 360) Phase = 360;
+
+    // ---- Frequency tuning word ----
+    uint32_t freqWord = (uint32_t)((FRQ * pow(2, 28)) / FMCLK);
+
+    uint16_t freqLSB = (uint16_t)(freqWord & 0x3FFF);
+    uint16_t freqMSB = (uint16_t)((freqWord >> 14) & 0x3FFF);
+
+    freqLSB |= 0x4000;  // FREQ0 write LSB
+    freqMSB |= 0x4000;  // FREQ0 write MSB
+
+    // ---- Phase tuning word ----
+    uint16_t phaseWord = (uint16_t)((Phase * 4096.0) / 360.0);
+    phaseWord |= 0xC000; // PHASE0 register address
+
+    // ---- Control word sequence ----
+    uint16_t controlReset = 0x2100; // Reset bit set
+    uint16_t controlExit  = 0x2000; // Reset bit cleared
+
+    // ---- SPI write sequence ----
+    uint16_t words[] = {
+        controlReset,
+        freqLSB,
+        freqMSB,
+        phaseWord,
+        controlExit
+    };
+    for (int i = 0; i < 5; i++) {
+        HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_RESET);
+        if (HAL_SPI_Transmit(&hspi2, &words[i], 1, HAL_MAX_DELAY) != HAL_OK) {
+            Error_Handler();
+        }
+        HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_SET);
     }
-    HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_SET);
-    #endif
+    // HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_RESET);
+    // if (HAL_SPI_Transmit(&hspi2, (uint8_t*)words, sizeof(words), HAL_MAX_DELAY) != HAL_OK) {
+    //     Error_Handler();
+    // }
+    // HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_SET);
+
+    // ---- Set waveform type ----
     HAL_Delay(1);
-
-    // WAVE CONFIGURATION
     /*
-    uint16_t SpiTxBuff[5] = {0x2100, // Control register 
-        FRQLW,      // Frequency register LSB
-        FRQHW,      // Frequency register MSB
-        phaseVal,   // Phase register
-        0x2000};    // Exit reset */
-
-    uint16_t SpiTxBuff[5] = {0x2100, 0x50c7, 0x4000, 0xc000, 0x2000};
-
     HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_RESET);
-    if (HAL_SPI_Transmit(&hspi2, &SpiTxBuff[0], 5, 10) != HAL_OK) {
+    if (HAL_SPI_Transmit(&hspi2, (uint8_t*)&WaveType, sizeof(WaveType), HAL_MAX_DELAY) != HAL_OK) {
         Error_Handler();
     }
     HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_SET);
-
-    // WAVE-TYPE
-    #ifdef SET_WAVE
-    HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_RESET);
-    if (HAL_SPI_Transmit(&hspi2, &WaveType, 1, 10) != HAL_OK) {
-        Error_Handler();
-    }
-    HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_SET);
-    #endif
-    return;
+    */
 }

@@ -105,6 +105,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   int loop_idx = 0;
   wave_flag_type_t wavetype = WAVE_TYPE_SIN;
+  float freq = 100;
   while (1) {
     loop_idx++;
     if (loop_idx % 4 == 0) {
@@ -115,12 +116,16 @@ int main(void)
     else {
       wavetype = WAVE_TYPE_TRI;
     }
-    AD9833_SetWave(wavetype, 1.0e6, 0);
+    AD9833_SetWave(wavetype, freq, 0);
+    freq *= 2;
     
-    for (int i=0; i<5; i++) {
+    for (int i=0; i<2; i++) {
       HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
       HAL_GPIO_TogglePin(LED_BLUE_GPIO_Port, LED_BLUE_Pin);
       HAL_Delay(1000);
+    }
+    if (freq > 1.0e6) {
+      freq = 100.0;
     }
     /* USER CODE END WHILE */
 
@@ -284,8 +289,8 @@ static void MX_SPI2_Init(void)
   hspi2.Init.Mode = SPI_MODE_MASTER;
   hspi2.Init.Direction = SPI_DIRECTION_2LINES;
   hspi2.Init.DataSize = SPI_DATASIZE_16BIT;
-  hspi2.Init.CLKPolarity = SPI_POLARITY_LOW;
-  hspi2.Init.CLKPhase = SPI_PHASE_2EDGE;
+  hspi2.Init.CLKPolarity = SPI_POLARITY_HIGH;
+  hspi2.Init.CLKPhase = SPI_PHASE_1EDGE;
   hspi2.Init.NSS = SPI_NSS_SOFT;
   hspi2.Init.BaudRatePrescaler = SPI_BAUDRATEPRESCALER_64;
   hspi2.Init.FirstBit = SPI_FIRSTBIT_MSB;

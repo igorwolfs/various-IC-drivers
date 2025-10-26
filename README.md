@@ -15,9 +15,10 @@ There are 2 main IC's on the board
 
 ## SPI connection
 CN5:
-- PB13: SPI2_SCK: D13
 - PB15: SPI2_MOSI: D11
 - PB14: SPI2_CS: D12
+- PB13: SPI2_SCK: D13
+	- WARNING: connect to different PB13 pin, this one seems to be missoldered somehow
 
 ## Communication over USB
 - LRA_USB_N; PA11 - Do not use
@@ -28,7 +29,7 @@ Solder SB15 and SB16
 # AD9833
 ## Pin interface
 ### Signal
-- MCLK: digital clock input - clock determines the output frequency accuracy and phase nosie.
+- MCLK: digital clock input - clock determines the output frequency accuracy and phase noise.
 - 
 
 ### SPI
