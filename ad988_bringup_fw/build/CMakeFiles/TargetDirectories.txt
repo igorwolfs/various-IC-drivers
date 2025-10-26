@@ -1,0 +1,6 @@
+/home/iwolfs/Work/Projects/electromechanical/v1-amc/acoustic-material-characterization/acoustic-processing-hw/bringup/analog_frontend/ad9833_bringup/ad988_bringup_fw/build/CMakeFiles/ad988_bringup_fw.dir
+/home/iwolfs/Work/Projects/electromechanical/v1-amc/acoustic-material-characterization/acoustic-processing-hw/bringup/analog_frontend/ad9833_bringup/ad988_bringup_fw/build/CMakeFiles/edit_cache.dir
+/home/iwolfs/Work/Projects/electromechanical/v1-amc/acoustic-material-characterization/acoustic-processing-hw/bringup/analog_frontend/ad9833_bringup/ad988_bringup_fw/build/CMakeFiles/rebuild_cache.dir
+/home/iwolfs/Work/Projects/electromechanical/v1-amc/acoustic-material-characterization/acoustic-processing-hw/bringup/analog_frontend/ad9833_bringup/ad988_bringup_fw/build/cmake/stm32cubemx/CMakeFiles/STM32_Drivers.dir
+/home/iwolfs/Work/Projects/electromechanical/v1-amc/acoustic-material-characterization/acoustic-processing-hw/bringup/analog_frontend/ad9833_bringup/ad988_bringup_fw/build/cmake/stm32cubemx/CMakeFiles/edit_cache.dir
+/home/iwolfs/Work/Projects/electromechanical/v1-amc/acoustic-material-characterization/acoustic-processing-hw/bringup/analog_frontend/ad9833_bringup/ad988_bringup_fw/build/cmake/stm32cubemx/CMakeFiles/rebuild_cache.dir
