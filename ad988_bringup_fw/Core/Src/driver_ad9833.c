@@ -10,7 +10,7 @@
 // -------------------------------- Functions --------------------------------
 
 // ------------------------------------------------ Sets Wave Frequency & Phase (In Degree) In PHASE0 & FREQ0 Registers
-
+// #define SET_WAVE
 // ------------------------------------------------ Initializing AD9833
 void AD9833_SetWave(uint16_t WaveType,float FRQ,float Phase){
     // ---------- Tuning Word for Phase ( 0 - 360 Degree )
@@ -28,20 +28,25 @@ void AD9833_SetWave(uint16_t WaveType,float FRQ,float Phase){
 
     // ** WRITE 
     // WAVE-TYPE
+    #ifdef SET_WAVE
     HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_RESET);
     if (HAL_SPI_Transmit(&hspi2, &WaveType, 1, 10) != HAL_OK) {
         Error_Handler();
     }
     HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_SET);
-
+    #endif
     HAL_Delay(1);
 
     // WAVE CONFIGURATION
+    /*
     uint16_t SpiTxBuff[5] = {0x2100, // Control register 
         FRQLW,      // Frequency register LSB
         FRQHW,      // Frequency register MSB
         phaseVal,   // Phase register
-        0x2000};    // Exit reset
+        0x2000};    // Exit reset */
+
+    uint16_t SpiTxBuff[5] = {0x2100, 0x50c7, 0x4000, 0xc000, 0x2000};
+
     HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_RESET);
     if (HAL_SPI_Transmit(&hspi2, &SpiTxBuff[0], 5, 10) != HAL_OK) {
         Error_Handler();
@@ -49,10 +54,12 @@ void AD9833_SetWave(uint16_t WaveType,float FRQ,float Phase){
     HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_SET);
 
     // WAVE-TYPE
+    #ifdef SET_WAVE
     HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_RESET);
     if (HAL_SPI_Transmit(&hspi2, &WaveType, 1, 10) != HAL_OK) {
         Error_Handler();
     }
     HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_SET);
+    #endif
     return;
 }
