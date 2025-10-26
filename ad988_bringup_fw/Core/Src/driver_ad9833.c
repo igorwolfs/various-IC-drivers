@@ -38,10 +38,10 @@ void AD9833_SetWave(uint16_t WaveType,float FRQ,float Phase){
 
     // WAVE CONFIGURATION
     uint16_t SpiTxBuff[5] = {0x2100, // Control register 
-        FRQLW, // Frequency register LSB
-        FRQHW, // Frequency register MSB
-        phaseVal, // Phase register
-        0x2000}; // Exit reset
+        FRQLW,      // Frequency register LSB
+        FRQHW,      // Frequency register MSB
+        phaseVal,   // Phase register
+        0x2000};    // Exit reset
     HAL_GPIO_WritePin(SPI2_CS_GPIO_Port, SPI2_CS_Pin, GPIO_PIN_RESET);
     if (HAL_SPI_Transmit(&hspi2, &SpiTxBuff[0], 5, 10) != HAL_OK) {
         Error_Handler();

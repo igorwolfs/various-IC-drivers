@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "driver_ad9833.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

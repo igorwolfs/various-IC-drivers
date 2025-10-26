@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Cortex Debug",
+      "type": "cortex-debug",
+      "request": "launch",
+      "servertype": "stlink",
+      "cwd": "${workspaceFolder}",
+      "executable": "./build/ad988_bringup_fw.elf",
+      "runToEntryPoint": "main",
+      "armToolchainPath": "/home/iwolfs/bin/electronics_cs/arm",
+      "gdbPath": "/home/iwolfs/bin/electronics_cs/arm/arm-none-eabi-gdb"
+    }
+  ]
+}
